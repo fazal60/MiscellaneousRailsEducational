@@ -1,0 +1,44 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <%= link_to welcome_index_path, :class => 'navbar-brand' do %>
+          RailsApp
+      <% end %>
+    </div>
+    <div class="collapse navbar-collapse" id="mainNavBar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to signup_index_path, :class => 'button white' do %>
+          <span class="glyphicon glyphicon-user" id="span"></span>Signup
+        <% end %></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<%= render partial: "shared/flash_messages", flash: flash %> 
+<div class="container">  
+  <div class="row">
+    <div class="col-sm-offset-3 col-sm-6" style="margin-top: 100px">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-user"></span>
+          Login to your account
+        </div>
+        <div class="panel-body">
+          <%= bootstrap_form_for(@user, :url => {:controller => 'users', :action => 'checkLogin'}) do |f| %>
+              <%= f.text_field :email, class: "input-lg" %> </p>
+              <%= f.password_field :password, class: "input-lg" %></p>
+              <%= f.submit :Login , class: "btn btn-block btn-lg btn-primary" %> 
+          <div class = "btn-group">
+            <%= link_to( "Cancel", :action => "index", :controller => "welcome",  :class => "btn btn-success align-center") %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to your Profile!</title>
+  <% if flash[:notice] %>
+    <script language='javascript'>
+      $(document).ready(function() {
+        <%= fading_flash_notice %>
+      });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVZkosKzZQFIhnKS4HHLBZbzueCxbe9OM"></script>
+  <% end %>
+</head>
+<script>
+$(function() {
+   $('.alert').delay(500).fadeIn('normal', function() {
+      $(this).delay(2500).fadeOut();
+   });
+});
+</script>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <%= link_to welcome_index_path, :class => 'navbar-brand' do %>
+            RailsApp
+        <% end %>
+      </div>
+      <div class="collapse navbar-collapse" id="mainNavBar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><%= link_to user_url, :class => 'button white' do %>
+              <span class="glyphicon glyphicon-user" id="span"></span>Welcome <%= @username %>!
+          <% end %></li>
+          <li>
+            <%= link_to session_path, :class => 'button white' , :method => 'delete' do %>
+                <span class="glyphicon glyphicon-log-out" id="span"></span>Logout
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <%= react_component('HelloMessage', {name: @username, flutracks: @paginatedData}) %>
+  <div class="pagniation-wrapper"> 
+    <%= will_paginate @paginatedData %> 
+  </div>
+</body>
+</html>
+

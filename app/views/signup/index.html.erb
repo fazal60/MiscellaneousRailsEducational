@@ -1,0 +1,41 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <%= link_to welcome_index_path, :class => 'navbar-brand' do %>
+          RailsApp
+      <% end %>
+    </div>
+    <div class="collapse navbar-collapse" id="mainNavBar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to users_login_path, :class => 'button white' do %>
+            <span class="glyphicon glyphicon-log-in" id="span"></span>Login
+        <% end %></li>
+          <!-- <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
+      </ul>
+  </div>
+  </div>
+</nav>
+<div class="container">  
+  <div class="row">
+    <div class="col-sm-offset-3 col-sm-6" style="margin-top: 100px">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Make an account
+        </div>
+        <div class="panel-body">
+          <%= bootstrap_form_for :account do |f| %>
+            <%= f.text_field :name, class: "input-lg" %>
+            <%= f.email_field :email, class: "input-lg" %>
+            <%= f.password_field :password, class: "input-lg" %>
+            <%= f.submit "Create Now!", class: "btn btn-block btn-lg btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

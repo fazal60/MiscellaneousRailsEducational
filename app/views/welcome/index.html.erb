@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome to RailsApp!</title>
+	<% if flash[:notice] %>
+		<script language='javascript'>
+			$(document).ready(function() {
+				<%= fading_flash_notice %>
+			});
+		</script>
+	<% end %>
+</head>
+<script>
+$(function() {
+   $('.alert').delay(500).fadeIn('normal', function() {
+      $(this).delay(2500).fadeOut();
+   });
+});
+</script>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">RailsApp</a>
+	    </div>
+	    <div class="collapse navbar-collapse" id="mainNavBar">
+		    <ul class="nav navbar-nav">
+		      <li class="active"><a href="#">Home</a></li>
+		      <li><a href="#">About</a></li>
+		      <li><a href="#">Contact Us</a></li>
+		    </ul>
+		    <ul class="nav navbar-nav navbar-right">
+		    	<li><%= link_to signup_index_path, :class => 'button white' do %>
+				    <span class="glyphicon glyphicon-user" id="span"></span>Signup
+				<% end %></li>
+				<li><%= link_to users_login_path, :class => 'button white' do %>
+				    <span class="glyphicon glyphicon-log-in" id="span"></span>Login
+				<% end %></li>
+		        <!-- <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
+		    </ul>
+		</div>
+	  </div>
+	</nav>
+	<%= render partial: "shared/flash_messages", flash: flash %> 
+	<div class="jumbotron text-center">
+	  <h1>My Sample Rails App</h1>
+	  <p>Resize this responsive page to see the effect!</p> 
+	</div>
+	<div class="container">  
+	  <div class="row">
+	    <div class="col-sm-12">
+	      <h3 class="text-center">Shahid's First Rails React App</h3>
+	      <img src="/Golden-Gate-Bridge.jpg" class="img-thumbnail" alt="Cinque Terre" width="1800" height="1080">
+	    </div>
+	</div>
+</body>
+</html>
