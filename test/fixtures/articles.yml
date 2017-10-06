@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  web_url: MyString
+  snippet: MyString
+  blog: 
+  source: MyString
+  multimedia: 
+  headline: 
+  keywords: 
+  pub_date: MyString
+  document_type: MyString
+  new_desk: MyString
+  section_name: MyString
+  byline: 
+  type_of_material: MyString
+  _id: MyString
+  word_count: 1
+  score: MyString
+  uri: MyString
+
+two:
+  web_url: MyString
+  snippet: MyString
+  blog: 
+  source: MyString
+  multimedia: 
+  headline: 
+  keywords: 
+  pub_date: MyString
+  document_type: MyString
+  new_desk: MyString
+  section_name: MyString
+  byline: 
+  type_of_material: MyString
+  _id: MyString
+  word_count: 1
+  score: MyString
+  uri: MyString

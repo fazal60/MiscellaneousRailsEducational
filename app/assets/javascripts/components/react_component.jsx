@@ -15,97 +15,32 @@ var ATLANTIC_OCEAN = {
 };
 
 var HelloMessage = React.createClass({
-	propTypes: {
-	    flutracks: React.PropTypes.array.isRequired
-  	},
-
-	alert() {
-		alert("Shahid");
-	},
 
   	render: function() {
     	return (
     		<div>
-    			<ShowSearchBar />
-    			<ShowTable props = {this.props}/>
+    			<ShowSearchBar nytdata={this.props.nytdata["response"]["docs"]}/>
+
     		</div>
     	);
   	}
 });
 
-var ModalShow = React.createClass({
-
+var ShowArticles = React.createClass({
 	render: function() {
-		Modal = ReactBootstrap.Modal;
-		Button = ReactBootstrap.Button;
-		return	(
-			<Modal show={this.props.showMyModal} onHide={this.props.close}>
-	          	<Modal.Header closeButton>
-	            	<Modal.Title>Modal heading</Modal.Title>
-	          	</Modal.Header>
-          		<Modal.Body>
-            		<h4>Text in a modal</h4>
-	          	</Modal.Body>
-	          	<Modal.Footer>
-		            <Button onClick={this.props.close}>Close</Button>
-	          	</Modal.Footer>
-	        </Modal>
-		);
-	}
-});
-
-var ShowTable = React.createClass({	
-	getInitialState() {
-	    return { showModal: false };
-	},
-
-	close() {
-	    this.setState({ showModal: false });
-	},
-
-	open() {
-	    this.setState({ showModal: true });
-	},
-
-  	render: function() {
-  		Modal = ReactBootstrap.Modal;
-  		Button = ReactBootstrap.Button;
-
-  		props = this.props.props;
-	  	flutracks = this.props.props.flutracks.map( function(flutrack, i) {
+	  	nytData = this.props.nytdata.map( function(nytdatum, i) {
 	      return (
-	        <tr key={i}>
-	          <td>{flutrack.user_name}</td>
-	          <td>{flutrack.tweet_text}</td>
-	          <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModal"> {flutrack.latitude} </button> </td>
-	          <td>{flutrack.longitude}</td>
-	          <td>{flutrack.tweet_date}</td>
-	          <td>{flutrack.aggravation}</td>
-	        </tr>
+	        <li key={i}><a href={nytdatum["web_url"]}>{nytdatum["headline"]["main"]}</a></li>
 	      );
 	    });
     	return (
-    		<div className="col-sm-10 col-sm-offset-1" id="Flutracks">
-	      		<h1><br/>Hello {this.props.props.name}!</h1>
-	      		<h1>Flutrack Data for Last 7 Days</h1>
-		        <div>		          
-		          <table className = "table table-nonfluid table-bordered" style={{ "width": "100%"}}>
-		            <thead>
-		              <tr>
-		                <th>Username</th>
-		                <th>Tweet Text</th>
-		                <th>Latitude</th>
-		                <th>Longitude</th>
-		                <th>Tweet Date</th>
-		                <th>Aggravation</th>
-		              </tr>
-		            </thead>
-		            <tbody>
-		              {flutracks}
-		            </tbody>
-		          </table>
-		        </div>
-	    	</div>
+			   <div className = "news-container">
+      			<div className="panel panel-default">
+  	    			<div className="panel-body">
+  	    				{nytData}
+  	    			</div>
+  	    		</div>
+  	    </div>
     	);
   	}
 });
@@ -114,10 +49,10 @@ var ShowSearchBar = React.createClass({
 	getInitialState: function () {
 	    return {
 	      isGeocodingError: false,
-	      foundAddress: INITIAL_LOCATION.address
+	      foundAddress: "No address entered"
 	    };
-	  },
-	componentDidMount: function () {
+	},
+	componentWillUpdate: function () {
 	  	this.map = new google.maps.Map(this.mapElement, {
 	    	zoom: INITIAL_MAP_ZOOM_LEVEL,
 	    	center: {
@@ -136,6 +71,36 @@ var ShowSearchBar = React.createClass({
 
 		this.geocoder = new google.maps.Geocoder();
 	},
+	componentDidMount: function () {
+	  	this.map = new google.maps.Map(this.mapElement, {
+	    	zoom: INITIAL_MAP_ZOOM_LEVEL,
+	    	center: {
+	      		lat: INITIAL_LOCATION.position.latitude,
+	      		lng: INITIAL_LOCATION.position.longitude
+	    	}
+	  	});
+
+	  	var myMap = this.map;
+
+	  	console.log(myMap);
+	  	console.log($("latId").text());
+
+	  	this.marker = new google.maps.Marker({
+		    map: this.map,
+		    position: {
+		      lat: INITIAL_LOCATION.position.latitude,
+		      lng: INITIAL_LOCATION.position.longitude
+		    }
+		});
+
+		this.geocoder = new google.maps.Geocoder();
+
+		$("#myModal").on("shown.bs.modal", function () {
+		    google.maps.event.trigger(myMap, "resize");
+		    myMap.setCenter(new google.maps.LatLng($("latId").text(), $("longId").text()));
+		});
+	},
+
 	setMapElementReference: function (mapElementReference) {
     	this.mapElement = mapElementReference;
   	},
@@ -165,28 +130,51 @@ var ShowSearchBar = React.createClass({
 	  	}.bind(this));
 	},
 	render: function() {
+
 		return (
 			<div className="container col-sm-10 col-sm-offset-1">
-				<form className="form-inline" onSubmit={this.handleFormSubmit}>
-				  <label className="sr-only" htmlFor="address">Address</label>
-				  <input type="text" className="form-control input-lg" id="address" placeholder="London" ref={this.setSearchInputElementReference} required />
-				  <button type="submit" className="btn btn-default btn-lg">
-				    <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
-				  </button>
-				</form>
-				<div className="row" style={{ "height": "250px" }} >
-				    <div className="col-sm-12" >
+
+				<div className="row" style={{"height": "250px"}}>
+            <form className="form-inline" onSubmit={this.handleFormSubmit}>
+              <input type="text" className="form-control input-lg" id="address" placeholder="Enter place or zipcode" ref={this.setSearchInputElementReference} required />
+              <button type="submit" className="btn btn-default btn-lg">
+                <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </button>
+            </form>
+
+            <div className="col-sm-12" >
 			      		{
-						  this.state.isGeocodingError 
-						  ? 
-						  <p className="bg-danger">Address not found.</p>
-						  :
-						  <p className="bg-info">{this.state.foundAddress}</p>
-						}
-						<div style={{ "position": "absolute", "width": "98%", "height": "250px"}} className="map" ref={this.setMapElementReference}></div>
-					</div>
+    						  this.state.isGeocodingError
+    						  ?
+    						  <p className="bg-danger">Address not found.</p>
+    						  :
+    						  <p className="bg-info">{this.state.foundAddress}</p>
+    						}
+            </div>
+
+            <div className = "news-container">
+         			<div className="panel panel-default">
+     	    			<div className="panel-body">
+     	    				<div style={{ "position": "inherit", "width": "100%", "height": "250px"}} className="map" ref={this.setMapElementReference}></div>
+     	    			</div>
+     	    		</div>
+   	        </div>
+
+            <ShowArticles nytdata={this.props.nytdata}/>
+
+            <form className="form-inline" onSubmit={this.handleFormSubmit}>
+              <input type="text" className="form-control input-lg" id="address" placeholder="Search for Articles" ref={this.setSearchInputElementReference} required />
+              <button type="submit" className="btn btn-default btn-lg">
+                <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </button>
+            </form>
+
 				</div>
-				<div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="row">
+
+        </div>
+
+				<div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  	<div className="modal-dialog" role="document">
 				    	<div className="modal-content">
 				      		<div className="modal-header">
@@ -195,8 +183,8 @@ var ShowSearchBar = React.createClass({
 				          			<span aria-hidden="true">&times;</span>
 				        		</button>
 				      		</div>
-				      		<div className="modal-body">
-								<p> My new Modal </p>
+				      		<div className="modal-body"  style={{ "height": "450px" }} >
+								Shahid
 				      		</div>
 				      		<div className="modal-footer">
 						        <button type="button" className="btn btn-primary">Save changes</button>

@@ -3,8 +3,10 @@ Rails.application.routes.draw do
   get 'hello_world', to: 'hello_world#index'
   get 'welcome/index'
   get 'users/login'
+  get 'users/search'
   post 'users/login'
   post 'users/checkLogin'
+  post 'users/search'
   root 'welcome#index'
 
   resources :users

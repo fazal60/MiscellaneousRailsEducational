@@ -29,6 +29,12 @@ gem 'react-rails'
 gem 'will_paginate', '~> 3.1.0'
 gem 'geocoder'
 gem 'react-bootstrap-rails'
+gem 'sunspot_rails'
+gem 'sunspot_solr'
+gem 'pg', '0.21.0'
+gem 'taps'
+gem 'progress_bar' #tracks progress of installs or other stuff
+gem 'activerecord-session_store' #for converting cookie_store to activerecord-session_store
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -46,13 +52,13 @@ gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
-  # gem 'sqlite3'
+  gem 'sqlite3'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 end
 
 group :production do
-  gem 'pg', '0.20.0'
+  gem 'pg', '0.21.0'
 end
 
 group :development do

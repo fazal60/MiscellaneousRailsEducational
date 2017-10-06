@@ -45,10 +45,16 @@ $(function() {
       </div>
     </div>
   </nav>
-  <%= react_component('HelloMessage', {name: @username, flutracks: @paginatedData}) %>
-  <div class="pagniation-wrapper"> 
-    <%= will_paginate @paginatedData %> 
+  <div>
+    <%= react_component('HelloMessage', {name: @username, nytdata: @result}) %>
+    <div class="search-container">
+      <%= bootstrap_form_tag url: '/users/search' do |f| %>
+        <%= f.text_field :search_for_articles, icon: "search"  %>
+        <%= f.submit "Search", class: "btn btn-success" %>
+      <% end %>
+    <div>
   </div>
+
+
 </body>
 </html>
-
