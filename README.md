@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple app developed using Rails, ReactJS and Apache Solr.  
 
-Things you may want to cover:
+Things you can do with it so far:
 
-* Ruby version
+* Create an account
 
-* System dependencies
+* Login to your account
 
-* Configuration
+* After logging in, you can see trending articles pulled off of New York times Article Search API.
 
-* Database creation
+* You can also search articles by writing text in the search box below Article panel.
 
-* Database initialization
 
-* How to run the test suite
+## Future plan
 
-* Services (job queues, cache servers, search engines, etc.)
+* Index data into Apache Solr from NYT Books API to hold over 30,000 Books.
 
-* Deployment instructions
+* Allow user to search Articles and Books.
 
-* ...
+
+NOTE: Will post installation steps shortly.
