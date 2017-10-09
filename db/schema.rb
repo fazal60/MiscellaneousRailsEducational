@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20171005175756) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "print_page"
+    t.index ["_id"], name: "p_key", unique: true, using: :btree
   end
 
   create_table "sessions", force: :cascade do |t|

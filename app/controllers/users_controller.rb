@@ -44,17 +44,21 @@ class UsersController < ApplicationController
 	end
 
 	def search
-		puts params[:search_for_articles]
-		if !params[:search_for_articles].blank?
+		puts "searching for term: ", params[:query]
+		if !params[:query].blank?
 			# Solr search on Article model
 	    @searched = Article.search do
-	      keywords(params[:search_for_articles])
+	      keywords(params[:query])
 	    end
 
 			session[:search_item] = @searched.results
-			puts "class is:", @searched.class
-			puts @searched.results.to_json
-			redirect_to user_url(:id => session[:user_id], :searched => params[:search_for_articles])
+			# puts "class is:", @searched.class
+			# puts @searched.results.to_json
+			render :json => {:art_search => @searched.results.to_json}
+			# respond_to do |format|
+			#   format.json  { render :json => {:articles_searched => @searched.results.to_json}}
+			# end
+			# redirect_to user_url(:id => session[:user_id], :searched => params[:query])
 		else
 			redirect_to user_url(:id => session[:user_id])
   	end

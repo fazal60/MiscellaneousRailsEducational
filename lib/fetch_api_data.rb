@@ -8,7 +8,6 @@ module GetDataFromAPI
   	})
   	request = Net::HTTP::Get.new(uri.request_uri)
   	@result = JSON.parse(http.request(request).body)
-
     @result["response"]["docs"].each do |jsonUnit, val|
       if jsonUnit["print_page"]
         article = Article.new(

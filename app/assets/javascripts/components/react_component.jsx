@@ -16,14 +16,81 @@ var ATLANTIC_OCEAN = {
 
 var HelloMessage = React.createClass({
 
+    searchArticles(event) {
+      if (event.target.value) {
+        $.ajax({
+            url: this.props.searchPath+"?query="+event.target.value,
+
+            dataType: 'json',
+
+            success: function(data) {
+              var parsedData = JSON.parse(data.art_search);
+              this.setState({articles: parsedData});
+            }.bind(this),
+
+            error: function(data) {
+              this.setState({articles: []});
+            }.bind(this)
+          });
+      }
+    },
+
+    getInitialState() {
+  		return { articles: [] };
+  	},
+
   	render: function() {
+      console.log(this.props);
     	return (
     		<div>
-    			<ShowSearchBar nytdata={this.props.nytdata["response"]["docs"]}/>
-
+    			<ShowSearchBar nytdata={this.props.nytdata["response"]["docs"]} searchPath = {this.props.searchPath} submitPath = {this.searchArticles} articles = {this.state.articles}/>
     		</div>
     	);
   	}
+});
+
+var Articles = React.createClass({
+	render() {
+		var showArticles = (article) => <Article key={article["id"]} name={article["headline"]["main"]}/>;
+    console.log("map printing");
+    console.log(this.props.articles);
+    var allArticles = this.props.articles.map(showArticles);
+
+		return (
+       <div className = "news-container">
+          <div className="panel panel-default">
+            <div className="panel-heading text-center">Articles searched</div>
+            <div className="panel-body">
+              <ul>
+                {allArticles}
+              </ul>
+            </div>
+          </div>
+      </div>
+    );
+	}
+});
+
+var Article = React.createClass({
+	render () {
+		return (
+			   <div>
+		        <h4>{ this.props.name }</h4>
+		    </div>
+			)
+	}
+});
+
+var ArticlesSearch = React.createClass({
+	render () {
+		return (
+			<div>
+				<form ref="form" action={ this.props.searchPath } acceptCharset="UTF-8" method="get">
+				<p><input ref="query" name="query" placeholder="Search Articles ......" onChange={ this.props.submitPath } /></p>
+				</form>
+			</div>
+			);
+	}
 });
 
 var ShowArticles = React.createClass({
@@ -36,6 +103,7 @@ var ShowArticles = React.createClass({
     	return (
 			   <div className = "news-container">
       			<div className="panel panel-default">
+              <div className="panel-heading text-center">Latest Trending Headlines</div>
   	    			<div className="panel-body">
   	    				{nytData}
   	    			</div>
@@ -148,12 +216,13 @@ var ShowSearchBar = React.createClass({
     						  ?
     						  <p className="bg-danger">Address not found.</p>
     						  :
-    						  <p className="bg-info">{this.state.foundAddress}</p>
+    						  <p className="bg-info"></p>
     						}
             </div>
 
             <div className = "news-container">
          			<div className="panel panel-default">
+                <div className="panel-heading text-center">Location on Map</div>
      	    			<div className="panel-body">
      	    				<div style={{ "position": "inherit", "width": "100%", "height": "250px"}} className="map" ref={this.setMapElementReference}></div>
      	    			</div>
@@ -161,37 +230,8 @@ var ShowSearchBar = React.createClass({
    	        </div>
 
             <ShowArticles nytdata={this.props.nytdata}/>
-
-            <form className="form-inline" onSubmit={this.handleFormSubmit}>
-              <input type="text" className="form-control input-lg" id="address" placeholder="Search for Articles" ref={this.setSearchInputElementReference} required />
-              <button type="submit" className="btn btn-default btn-lg">
-                <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
-              </button>
-            </form>
-
-				</div>
-        <div className="row">
-
-        </div>
-
-				<div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				  	<div className="modal-dialog" role="document">
-				    	<div className="modal-content">
-				      		<div className="modal-header">
-				        		<h5 className="modal-title">Modal title</h5>
-				        		<button type="button" className="close" data-dismiss="modal" aria-label="Close">
-				          			<span aria-hidden="true">&times;</span>
-				        		</button>
-				      		</div>
-				      		<div className="modal-body"  style={{ "height": "450px" }} >
-								Shahid
-				      		</div>
-				      		<div className="modal-footer">
-						        <button type="button" className="btn btn-primary">Save changes</button>
-						        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-				      		</div>
-				    	</div>
-				  	</div>
+            <ArticlesSearch searchPath = {this.props.searchPath} submitPath = {this.props.submitPath} />
+            <Articles articles = {this.props.articles} />
 				</div>
 			</div>
 		);
